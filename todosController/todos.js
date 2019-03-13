@@ -53,6 +53,23 @@ class TodosController {
     }
   }
 
+  async toggleDoneTodo(req, res){
+    const {id} = req.params;
+    const data = req.body;
+    if(!ObjectId.isValid(id) && !id.match(/^[a-fA-F0-9]{24}$/)){
+      return res.status(404).send({
+        success: 'false',
+        message: 'todo does not exist',
+      });
+    }
+    try {
+      const todos = await Todo.findByIdAndUpdate(id,data);
+      res.json(todos);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateTodo(req, res){
     const {id} = req.params;
     const data = req.body;
